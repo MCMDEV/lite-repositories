@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Project -->
-    <groupId>com.github.expdev07</groupId>
-    <artifactId>spigot-lite-repositories</artifactId>
-    <version>1.0.3</version>
+    <groupId>de.mcmdev</groupId>
+    <artifactId>lite-repositories</artifactId>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <!-- Properties -->
@@ -17,15 +17,9 @@
     </properties>
 
     <!-- Maven Central -->
-    <name>spigot-lite-repositories</name>
-    <description>Simple repositories for Spigot</description>
-    <url>https://github.com/ExpDev07/spigot-lite-repositories</url>
-
-    <scm>
-        <connection>scm:git:git://github.com/ExpDev07/spigot-lite-repositories.git</connection>
-        <developerConnection>scm:git:ssh://ExpDev07:spigot-lite-repositories.git</developerConnection>
-        <url>https://github.com/ExpDev07/spigot-lite-repositories</url>
-    </scm>
+    <name>lite-repositories</name>
+    <description>Simple data repositories</description>
+    <url>https://github.com/MCMDEV/lite-repositories</url>
 
     <!-- License -->
     <licenses>
@@ -43,19 +37,11 @@
             <name>Marius Richardsen</name>
             <email>mariusrich2@gmail.com</email>
         </developer>
+        <developer>
+            <id>MCMDEV</id>
+            <email>mcmdev@neruxvace.net</email>
+        </developer>
     </developers>
-
-    <!-- Distribution -->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <!-- Building -->
     <build>
@@ -67,17 +53,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
             <plugin>
@@ -102,20 +77,6 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -146,6 +107,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.2</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
         </dependency>
     </dependencies>
 

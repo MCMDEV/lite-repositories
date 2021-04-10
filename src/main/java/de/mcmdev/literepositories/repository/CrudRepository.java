@@ -1,8 +1,9 @@
-package com.github.expdev07.spigotliterepositories.repository;
+package de.mcmdev.literepositories.repository;
 
-import com.github.expdev07.spigotliterepositories.Identifiable;
+import de.mcmdev.literepositories.Identifiable;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Repository that covers all the basic CRUD operations (Create, Read, Update, and Delete).
@@ -35,7 +36,7 @@ public interface CrudRepository<ID, T extends Identifiable<ID>> extends Reposito
      * @param id The id.
      * @return The object.
      */
-    T find(ID id);
+    Optional<T> find(ID id);
 
     /**
      * Retrieves all the objects.

@@ -1,6 +1,6 @@
-package com.github.expdev07.spigotliterepositories.repository;
+package de.mcmdev.literepositories.repository;
 
-import com.github.expdev07.spigotliterepositories.Identifiable;
+import de.mcmdev.literepositories.Identifiable;
 
 /**
  * Repository that stores a type associated with its id.

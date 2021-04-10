@@ -1,17 +1,17 @@
-package com.github.expdev07.spigotliterepositories.repository.json;
+package de.mcmdev.literepositories.repository.json;
 
-import com.github.expdev07.spigotliterepositories.Identifiable;
-import com.github.expdev07.spigotliterepositories.repository.CrudRepository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.mcmdev.literepositories.Identifiable;
+import de.mcmdev.literepositories.repository.CrudRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang.NotImplementedException;
-import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * CRUD repository that interacts with a JSON files. Each object will have its own file associated with its unique id.
@@ -24,9 +24,9 @@ public class JsonRepository<ID, T extends Identifiable<ID>> implements CrudRepos
 {
 
     /**
-     * The plugin instance.
+     * The data folder.
      */
-    private Plugin plugin;
+    private File dataFolder;
 
     /**
      * The class type.
@@ -46,13 +46,12 @@ public class JsonRepository<ID, T extends Identifiable<ID>> implements CrudRepos
     /**
      * Constructs a new {@link JsonRepository}.
      *
-     * @param plugin The plugin.
-     * @param type The type.
-     * @param path The path.
+     * @param dataFolder The data folder.
+     * @param type       The type.
+     * @param path       The path.
      */
-    public JsonRepository(Plugin plugin, Class<T> type, String path)
-    {
-        this(plugin, type, path, new GsonBuilder().setPrettyPrinting().create());
+    public JsonRepository(File dataFolder, Class<T> type, String path) {
+        this(dataFolder, type, path, new GsonBuilder().setPrettyPrinting().create());
     }
 
     /**
@@ -64,7 +63,7 @@ public class JsonRepository<ID, T extends Identifiable<ID>> implements CrudRepos
     protected File getFile(ID id)
     {
         final File file = new File(
-                this.plugin.getDataFolder() + File.separator + this.path, id.toString() + ".json"
+                dataFolder + File.separator + this.path, id.toString() + ".json"
         );
 
         file.getParentFile().mkdirs();
@@ -112,13 +111,12 @@ public class JsonRepository<ID, T extends Identifiable<ID>> implements CrudRepos
      * {@inheritDoc}
      */
     @Override
-    public T find(ID id)
-    {
+    public Optional<T> find(ID id) {
         // Read.
         try {
-            return gson.fromJson(new FileReader(this.getFile(id)), type);
+            return Optional.ofNullable(gson.fromJson(new FileReader(this.getFile(id)), type));
         } catch (Exception ignored) {
-            return null;
+            return Optional.empty();
         }
     }
 

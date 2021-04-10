@@ -1,4 +1,4 @@
-package com.github.expdev07.spigotliterepositories;
+package de.mcmdev.literepositories;
 
 /**
  * An object that is identifiable by an unique id.
