@@ -74,4 +74,13 @@ public class MongoRepository<ID, T extends Identifiable<ID>> implements AsyncCru
         });
         return completableFuture;
     }
+
+    @Override
+    public CompletableFuture<Boolean> delete(ID id) {
+        CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
+        mongoCollection.deleteOne(eq(idField, id), (deleteResult, throwable) -> {
+            completableFuture.complete(deleteResult.wasAcknowledged());
+        });
+        return completableFuture;
+    }
 }

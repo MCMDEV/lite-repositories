@@ -53,4 +53,12 @@ public interface AsyncCrudRepository<ID, T extends Identifiable<ID>> extends Rep
      */
     CompletableFuture<Boolean> delete(T object);
 
+    /**
+     * Deletes the object by ID.
+     *
+     * @param id The ID of the object.
+     * @return True if deleted.
+     */
+    CompletableFuture<Boolean> delete(ID id);
+
 }
