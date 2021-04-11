@@ -5,13 +5,10 @@ import com.google.gson.GsonBuilder;
 import de.mcmdev.literepositories.Identifiable;
 import de.mcmdev.literepositories.repository.CrudRepository;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang.NotImplementedException;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * CRUD repository that interacts with a JSON files. Each object will have its own file associated with its unique id.
@@ -124,9 +121,17 @@ public class JsonRepository<ID, T extends Identifiable<ID>> implements CrudRepos
      * {@inheritDoc}
      */
     @Override
-    public Collection<T> findAll()
-    {
-        throw new NotImplementedException();
+    public Collection<T> findAll() {
+        File pathFolder = new File(dataFolder + File.separator + this.path);
+        pathFolder.mkdirs();
+        return Arrays.stream(pathFolder.listFiles((dir, name) -> name.endsWith(".json"))).map(file -> {
+            try (FileReader fileReader = new FileReader(file)) {
+                return gson.fromJson(fileReader, type);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).collect(Collectors.toList());
     }
 
     /**
