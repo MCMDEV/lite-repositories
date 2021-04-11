@@ -2,6 +2,7 @@ package de.mcmdev.literepositories.repository.mongo;
 
 import com.google.gson.Gson;
 import com.mongodb.async.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
 import de.mcmdev.literepositories.Identifiable;
 import de.mcmdev.literepositories.repository.AsyncCrudRepository;
 import org.bson.Document;
@@ -34,9 +35,9 @@ public class MongoRepository<ID, T extends Identifiable<ID>> implements AsyncCru
 
     @Override
     public T save(T object) {
-        mongoCollection.replaceOne(eq(idField, object.getId().toString()), Document.parse(gson.toJson(object)), (result, t) -> {
+        mongoCollection.replaceOne(eq(idField, object.getId().toString()), Document.parse(gson.toJson(object)), new UpdateOptions().upsert(true), (result, t) -> {
         });
-        return null;
+        return object;
     }
 
     @Override
@@ -50,7 +51,10 @@ public class MongoRepository<ID, T extends Identifiable<ID>> implements AsyncCru
     @Override
     public CompletableFuture<Optional<T>> find(ID id) {
         CompletableFuture<Optional<T>> completableFuture = new CompletableFuture<>();
-        mongoCollection.find(eq(idField, id)).first((document, throwable) -> {
+        mongoCollection.find(eq(idField, id)).limit(1).first((document, throwable) -> {
+            if (document == null) {
+                completableFuture.complete(Optional.empty());
+            }
             completableFuture.complete(Optional.ofNullable(gson.fromJson(document.toJson(), type)));
         });
         return completableFuture;
