@@ -9,7 +9,6 @@ import org.bson.Document;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -43,19 +42,19 @@ public class MongoRepository<ID, T extends Identifiable<ID>> implements AsyncCru
     @Override
     public Collection<T> saveAll(Collection<T> objects) {
         ArrayList<T> objectList = new ArrayList<>(objects);
-        mongoCollection.insertMany(objectList.stream().map(t -> Document.parse(gson.toJson(t))).collect(Collectors.toList()), (unused, throwable) -> {
-        });
+        objectList.forEach(this::save);
         return objectList;
     }
 
     @Override
     public CompletableFuture<Optional<T>> find(ID id) {
         CompletableFuture<Optional<T>> completableFuture = new CompletableFuture<>();
-        mongoCollection.find(eq(idField, id)).limit(1).first((document, throwable) -> {
+        mongoCollection.find(eq(idField, id.toString())).first((document, throwable) -> {
             if (document == null) {
                 completableFuture.complete(Optional.empty());
+            } else {
+                completableFuture.complete(Optional.ofNullable(gson.fromJson(document.toJson(), type)));
             }
-            completableFuture.complete(Optional.ofNullable(gson.fromJson(document.toJson(), type)));
         });
         return completableFuture;
     }
